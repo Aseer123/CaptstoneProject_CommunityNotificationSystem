@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: gateway  # The name of your Gateway application
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true  # Enables service discovery for routes
+      routes:
+        - id: auth-service
+          uri: http://localhost:8081  # Connect to the auth-service
+          predicates:
+            - Path=/auth/**  # All requests to /auth will be routed to auth-service
+          
+        - id: feedback-service
+          uri: http://localhost:8085
+          predicates:
+            - Path=/feedback/**  # All requests to /feedback will be routed to feedback-service
+          
+        - id: maintenance-task-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/tasks/**  # All requests to /tasks will be routed to maintenance-task-service
+          
+        - id: notifications-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/notifications/**  # All requests to /notifications will be routed to notifications-service
+             
+        - id: payment-service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/payments/**  # All requests to /payments will be routed to payment-service
+  
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/  # Eureka server URL
+    fetch-registry: true
+    register-with-eureka: true
+   
+server:
+  port: 8083  # The port on which the gateway will run
